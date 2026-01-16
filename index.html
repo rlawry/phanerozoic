@@ -531,7 +531,7 @@
       const LEVELS = [
         {
           id:"L1",
-          title:"Level 1 — Period names (Oldest → Youngest)",
+          title:"Level 1 — Period names (Oldest ON TOP → Youngest ON BOTTOM)",
           desc:"Unshuffle the period names and order them from oldest to youngest (Cambrian → Quaternary).",
           type:"sort",
           makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:p, key:p })),
@@ -539,7 +539,7 @@
         },
         {
           id:"L2",
-          title:"Level 2 — Period names (Youngest → Oldest)",
+          title:"Level 2 — Period names (Youngest ON TOP → Oldest ON BOTTOM)",
           desc:"Unshuffle the period names and order them from youngest to oldest (Quaternary → Cambrian).",
           type:"sort",
           makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:p, key:p })),
@@ -547,7 +547,7 @@
         },
         {
           id:"L3",
-          title:"Level 3 — Life on Earth (Youngest → Oldest)",
+          title:"Level 3 — Life on Earth (Youngest ON TOP → Oldest ON BOTTOM)",
           desc:"Unshuffle the Life-on-Earth labels (one per period) and order them from youngest to oldest.",
           type:"sort",
           makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:LIFE_BY_PERIOD.get(p), key:p })),
@@ -555,7 +555,7 @@
         },
         {
           id:"L4",
-          title:"Level 4 — Life on Earth (Oldest → Youngest)",
+          title:"Level 4 — Life on Earth (Oldest ON TOP → Youngest ON BOTTOM)",
           desc:"Unshuffle the Life-on-Earth labels (one per period) and order them from oldest to youngest.",
           type:"sort",
           makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:LIFE_BY_PERIOD.get(p), key:p })),
@@ -571,7 +571,7 @@
         },
         {
           id:"L6",
-          title:"Level 6 — Speed Round (Timer + Penalty)",
+          title:"Level 6 — Speed Round (Timer)",
           desc:"Order the period names in the required direction before time runs out. Wrong submit adds a penalty. No reshuffle on wrong.",
           type:"speed",
           makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:p, key:p })),
@@ -865,7 +865,7 @@
             // pick direction randomly each time
             currentDirection = (Math.random()<0.5) ? "old2young" : "young2old";
             levelDesc.textContent =
-              `${L.desc} Direction: ${currentDirection==="old2young" ? "Oldest → Youngest" : "Youngest → Oldest"}.`;
+              `${L.desc} ** Direction: ${currentDirection==="old2young" ? "Oldest ON TOP → Youngest ON BOTTOM" : "Youngest ON TOP → Oldest ON BOTTOM"}.`;
 
             currentExpected = (currentDirection==="old2young") ? PERIODS_OLD_TO_YOUNG : PERIODS_YOUNG_TO_OLD;
             startSpeedTimer();
