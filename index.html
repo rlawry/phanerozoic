@@ -370,6 +370,7 @@
 </head>
 
 <body>
+  <audio id="lvl7Music" src="chowder.mp3" preload="auto" loop></audio>
   <!-- Splash screen -->
   <div id="splash" class="overlay" aria-modal="true" role="dialog">
     <canvas id="splashCanvas" class="full"></canvas>
@@ -620,6 +621,7 @@
       const lvl7ProgressLine = $("#lvl7ProgressLine");
       const lvl7TimerEl = $("#lvl7Timer");
       const lvl7MiniStatus = $("#lvl7MiniStatus");
+      const lvl7Music = $("#lvl7Music");
 
       // Certificate
       const certOverlay = $("#certOverlay");
@@ -1188,6 +1190,21 @@
       }
 
       function startLevel7(){
+        // start looping background audio for level 7
+        try {
+          lvl7Music.currentTime = 0;   // optional: restart from beginning
+          lvl7Music.loop = true;
+          const p = lvl7Music.play();
+          if (p && typeof p.catch === "function") {
+            p.catch(() => {
+              // If a browser blocks playback, you can show a small message to click again.
+              lvl7MiniStatus.textContent = "Click again to enable audio";
+            });
+          }
+        } catch {
+          // ignore
+        }
+
         lvl7Started = true;
         lvl7StartTime = Date.now();
         lvl7MiniStatus.textContent = "Go!";
@@ -1273,6 +1290,8 @@
       function finishLevel7(){
         if(lvl7Tick){ clearInterval(lvl7Tick); lvl7Tick = null; }
         lvl7MiniStatus.textContent = "Complete!";
+        lvl7Music.pause();
+        lvl7Music.currentTime = 0; // optional
         // show certificate overlay
         showCertificate();
       }
