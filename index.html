@@ -1,1436 +1,1452 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Geologic Time Ordering — Cambrian to Quaternary</title>
-    <style>
-        /* ---------------------------
-       SOAP THEME (bubbly, clean)
-       --------------------------- */
-        :root {
-            --bg1: #dff8ff;
-            /* watery */
-            --bg2: #f3fff7;
-            /* mint */
-            --bg3: #f5edff;
-            /* faint lavender */
-            --panel: rgba(255, 255, 255, .78);
-            --panel2: rgba(255, 255, 255, .62);
-            --text: #0b1220;
-            --muted: #4b5563;
-            --border: rgba(11, 18, 32, .14);
-            --accent: #22c1d6;
-            /* aqua */
-            --accent2: #4ade80;
-            /* mint */
-            --accent3: #a78bfa;
-            /* lavender */
-            --good: #10b981;
-            --bad: #ef4444;
-            --warn: #f59e0b;
-            --shadow: 0 14px 40px rgba(0, 0, 0, .10);
-            --shadow2: 0 8px 24px rgba(0, 0, 0, .08);
-            --radius: 22px;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-            color: var(--text);
-        }
-
-        body {
-            background:
-                radial-gradient(1400px 900px at 10% 15%, var(--bg1), transparent 60%),
-                radial-gradient(1100px 800px at 90% 10%, var(--bg3), transparent 58%),
-                radial-gradient(1000px 800px at 35% 95%, var(--bg2), transparent 62%),
-                linear-gradient(135deg, #ffffff, #f7feff 35%, #ffffff 70%, #fefcff);
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Bubble overlay */
-        body::before {
-            content: "";
-            position: fixed;
-            inset: -200px;
-            pointer-events: none;
-            background:
-                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, .55) 0 10px, transparent 11px),
-                radial-gradient(circle at 22% 60%, rgba(255, 255, 255, .48) 0 14px, transparent 15px),
-                radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .42) 0 9px, transparent 10px),
-                radial-gradient(circle at 55% 75%, rgba(255, 255, 255, .40) 0 12px, transparent 13px),
-                radial-gradient(circle at 72% 22%, rgba(255, 255, 255, .50) 0 16px, transparent 17px),
-                radial-gradient(circle at 86% 55%, rgba(255, 255, 255, .38) 0 10px, transparent 11px),
-                radial-gradient(circle at 92% 80%, rgba(255, 255, 255, .46) 0 18px, transparent 19px);
-            filter: blur(.2px);
-            opacity: .85;
-            transform: rotate(-3deg);
-        }
-
-        .app {
-            max-width: 1180px;
-            margin: 0 auto;
-            padding: 18px 18px 28px;
-            display: grid;
-            gap: 14px;
-        }
-
-        header {
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            background: linear-gradient(180deg, var(--panel), var(--panel2));
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            overflow: hidden;
-        }
-
-        .headerTop {
-            padding: 14px 16px 10px;
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        .titleWrap {
-            display: grid;
-            gap: 6px;
-            min-width: 320px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 18px;
-            letter-spacing: .2px;
-        }
-
-        .sub {
-            margin: 0;
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.4;
-            max-width: 82ch;
-        }
-
-        .headerControls {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: flex-end;
-        }
-
-        select,
-        button {
-            font: inherit;
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, .72);
-            color: var(--text);
-            padding: 9px 12px;
-            box-shadow: 0 1px 0 rgba(255, 255, 255, .9) inset, var(--shadow2);
-            cursor: pointer;
-            transition: transform .05s ease, filter .15s ease, background .15s ease;
-        }
-
-        select {
-            cursor: pointer;
-        }
-
-        button:hover,
-        select:hover {
-            filter: brightness(1.02);
-        }
-
-        button:active {
-            transform: translateY(1px);
-        }
-
-        button[disabled] {
-            opacity: .55;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .btnPrimary {
-            border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
-            background: linear-gradient(180deg, color-mix(in oklab, #ffffff 70%, var(--accent) 20%), rgba(255, 255, 255, .74));
-        }
-
-        .btnGhost {
-            background: rgba(255, 255, 255, .62);
-        }
-
-        .headerMid {
-            padding: 0 16px 12px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .pills {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 7px 10px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, .65);
-            box-shadow: 0 1px 0 rgba(255, 255, 255, .9) inset;
-            user-select: none;
-            white-space: nowrap;
-            font-size: 13px;
-            color: var(--muted);
-        }
-
-        .dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: var(--muted);
-        }
-
-        .dot.good {
-            background: var(--good);
-        }
-
-        .dot.bad {
-            background: var(--bad);
-        }
-
-        .dot.warn {
-            background: var(--warn);
-        }
-
-        .toggles {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            align-items: center;
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .toggles label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        /* Feedback banner */
-        .feedback {
-            border-top: 1px solid var(--border);
-            padding: 10px 16px;
-            background: rgba(255, 255, 255, .58);
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        .feedbackBox {
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-            max-width: 86ch;
-        }
-
-        .badge {
-            width: 26px;
-            height: 26px;
-            border-radius: 10px;
-            display: grid;
-            place-items: center;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, .72);
-            box-shadow: 0 1px 0 rgba(255, 255, 255, .9) inset;
-            flex: 0 0 auto;
-        }
-
-        .feedbackText {
-            display: grid;
-            gap: 2px;
-        }
-
-        .feedbackText .main {
-            font-size: 13px;
-            font-weight: 650;
-            color: var(--text);
-        }
-
-        .feedbackText .detail {
-            font-size: 13px;
-            color: var(--muted);
-            line-height: 1.35;
-        }
-
-        .content {
-            display: grid;
-            gap: 14px;
-            grid-template-columns: 1fr;
-            align-items: start;
-        }
-
-        @media (min-width: 980px) {
-            .content {
-                grid-template-columns: 1.25fr .75fr;
-            }
-        }
-
-        .panel {
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            background: linear-gradient(180deg, var(--panel), var(--panel2));
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            overflow: hidden;
-        }
-
-        .panel h2 {
-            margin: 0;
-            font-size: 13px;
-            letter-spacing: .2px;
-            padding: 12px 14px;
-            border-bottom: 1px solid var(--border);
-            color: var(--muted);
-            background: rgba(255, 255, 255, .60);
-        }
-
-        .panel .body {
-            padding: 14px;
-            display: grid;
-            gap: 12px;
-        }
-
-        /* Sort/match list */
-        .cardlist {
-            display: grid;
-            gap: 10px;
-            justify-items: center;
-            /* NEW: cards don’t stretch full width */
-            padding: 2px;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        /* ---------------------------
-       UNIQUE CARD COLORS
-       - Each card gets --cardColor set in JS
-       - High-visibility color rail + focus outline
-       --------------------------- */
-        .card {
-            --cardColor: var(--accent);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            max-width: 520px;
-            margin-inline: auto;
-            width: 100%;
-            /* NEW: narrows cards */
-            gap: 10px;
-            padding: 12px 12px 12px 34px;
-            /* left rail space */
-            border-radius: 18px;
-            border: 1px solid color-mix(in oklab, var(--cardColor) 35%, var(--border));
-            background:
-                radial-gradient(18px 18px at 14% 28%, rgba(255, 255, 255, .82), transparent 62%),
-                linear-gradient(180deg,
-                    color-mix(in oklab, rgba(255, 255, 255, .92) 80%, var(--cardColor) 10%),
-                    rgba(255, 255, 255, .62));
-            box-shadow: 0 1px 0 rgba(255, 255, 255, .92) inset, var(--shadow2);
-            user-select: none;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: "";
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            bottom: 10px;
-            width: 10px;
-            border-radius: 999px;
-            background: var(--cardColor);
-            box-shadow:
-                0 0 0 2px rgba(255, 255, 255, .65) inset,
-                0 10px 18px rgba(0, 0, 0, .10);
-        }
-
-        .card[draggable="true"] {
-            cursor: grab;
-        }
-
-        .card:active {
-            cursor: grabbing;
-        }
-
-        .card.dragging {
-            opacity: .70;
-            outline: 2px dashed color-mix(in oklab, var(--cardColor) 60%, var(--border));
-            outline-offset: 3px;
-        }
-
-        .card:focus {
-            outline: 4px solid color-mix(in oklab, var(--cardColor) 55%, rgba(255, 255, 255, .92));
-            outline-offset: 4px;
-        }
-
-        .card .txt {
-            flex: 1;
-            /* use remaining space */
-            text-align: left;
-            /* bring text next to the handle */
-            font-weight: 800;
-            /* thicker text, no font-size change */
-            letter-spacing: 0.15px;
-        }
-
-        .handle {
-            width: 34px;
-            height: 34px;
-            border-radius: 12px;
-            border: 1px solid color-mix(in oklab, var(--cardColor) 35%, var(--border));
-            background: rgba(255, 255, 255, .76);
-            display: grid;
-            place-items: center;
-            flex: 0 0 auto;
-            color: color-mix(in oklab, var(--cardColor) 85%, var(--muted));
-            font-weight: 900;
-            box-shadow: 0 1px 0 rgba(255, 255, 255, .92) inset;
-        }
-
-        .hint {
-            font-size: 12px;
-            color: var(--muted);
-            line-height: 1.35;
-            padding-left: 2px;
-        }
-
-        /* Match mode */
-        .rows {
-            display: grid;
-            gap: 10px;
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 160px 1fr;
-            gap: 10px;
-            align-items: center;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            background: rgba(255, 255, 255, .62);
-            box-shadow: 0 1px 0 rgba(255, 255, 255, .9) inset;
-        }
-
-        .row .left {
-            --rowColor: var(--accent);
-            position: relative;
-            font-size: 13px;
-            font-weight: 800;
-            padding: 9px 10px 9px 20px;
-            border-radius: 14px;
-            border: 1px solid color-mix(in oklab, var(--rowColor) 28%, var(--border));
-            background:
-                radial-gradient(18px 18px at 20% 25%, rgba(255, 255, 255, .86), transparent 62%),
-                linear-gradient(180deg,
-                    color-mix(in oklab, rgba(255, 255, 255, .92) 80%, var(--rowColor) 8%),
-                    rgba(255, 255, 255, .62));
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .row .left::before {
-            content: "";
-            position: absolute;
-            left: 8px;
-            top: 8px;
-            bottom: 8px;
-            width: 8px;
-            border-radius: 999px;
-            background: var(--rowColor);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, .6) inset;
-        }
-
-        .dropzone {
-            --rowColor: var(--accent);
-            min-height: 48px;
-            border-radius: 18px;
-            border: 2px dashed color-mix(in oklab, var(--rowColor) 40%, var(--border));
-            background: rgba(255, 255, 255, .45);
-            display: flex;
-            align-items: center;
-            padding: 8px 8px;
-            gap: 8px;
-        }
-
-        .dropzone.filled {
-            border-style: solid;
-            border-color: color-mix(in oklab, var(--rowColor) 30%, var(--border));
-            background: rgba(255, 255, 255, .62);
-        }
-
-        .dropzone.over {
-            border-color: color-mix(in oklab, var(--rowColor) 65%, var(--border));
-            background: color-mix(in oklab, rgba(255, 255, 255, .55) 75%, var(--rowColor) 12%);
-        }
-
-        .placeholder {
-            color: var(--muted);
-            font-size: 13px;
-            padding-left: 6px;
-        }
-
-        details {
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            background: rgba(255, 255, 255, .58);
-            box-shadow: 0 1px 0 rgba(255, 255, 255, .9) inset;
-            overflow: hidden;
-        }
-
-        details>summary {
-            cursor: pointer;
-            padding: 10px 12px;
-            font-weight: 700;
-            color: var(--muted);
-            user-select: none;
-            list-style: none;
-        }
-
-        details>summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .rules {
-            padding: 0 12px 12px;
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.45;
-            display: grid;
-            gap: 8px;
-        }
-
-        .rules .rule {
-            padding: 10px 10px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, .62);
-        }
-
-        /* tiny motion for wrong */
-        .shake {
-            animation: shake .22s linear 2;
-        }
-
-        @keyframes shake {
-            0% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-4px);
-            }
-
-            50% {
-                transform: translateX(4px);
-            }
-
-            75% {
-                transform: translateX(-3px);
-            }
-
-            100% {
-                transform: translateX(0);
-            }
-        }
-
-        .card,
-        .row,
-        .dropzone {
-            -webkit-user-select: none;
-            user-select: none;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Geologic Time — Phanerozoic Order (Cambrian → Quaternary)</title>
+  <style>
+    :root{
+      --bgA:#dff8ff; --bgB:#f3fff7; --bgC:#f5edff;
+      --panel: rgba(255,255,255,.78);
+      --text:#0b1220; --muted:#4b5563;
+      --border: rgba(11,18,32,.14);
+      --accent:#22c1d6;
+      --good:#10b981; --bad:#ef4444; --warn:#f59e0b;
+      --shadow: 0 14px 38px rgba(0,0,0,.10);
+      --radius: 18px;
+      --cardW: 520px; /* cards are intentionally narrower */
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; color:var(--text); }
+    body{
+      background:
+        radial-gradient(1200px 800px at 12% 18%, var(--bgA), transparent 60%),
+        radial-gradient(1100px 760px at 88% 16%, var(--bgC), transparent 58%),
+        radial-gradient(980px 760px at 38% 95%, var(--bgB), transparent 62%),
+        linear-gradient(135deg,#ffffff,#f7feff 35%,#ffffff 70%,#fefcff);
+      overflow-x:hidden;
+    }
+
+    /* ---------- Layout ---------- */
+    .app{ max-width:1180px; margin:0 auto; padding:16px 16px 28px; display:grid; gap:12px; }
+    header{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(255,255,255,.84), rgba(255,255,255,.66));
+      backdrop-filter: blur(8px);
+      overflow:hidden;
+    }
+    .topbar{
+      display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
+      padding:12px 14px 10px; flex-wrap:wrap;
+    }
+    .titleWrap{ display:grid; gap:4px; min-width:300px; }
+    h1{ margin:0; font-size:16px; letter-spacing:.2px; }
+    .sub{ margin:0; color:var(--muted); font-size:13px; line-height:1.35; max-width:90ch; }
+    .controls{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+
+    button, select{
+      font:inherit;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.76);
+      color: var(--text);
+      padding:9px 12px;
+      cursor:pointer;
+      box-shadow: 0 1px 0 rgba(255,255,255,.9) inset;
+      transition: transform .05s ease, filter .15s ease;
+    }
+    button:active{ transform: translateY(1px); }
+    button:hover, select:hover{ filter: brightness(1.02); }
+    button[disabled], select[disabled]{ opacity:.55; cursor:not-allowed; }
+
+    .btnPrimary{
+      border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
+      background: linear-gradient(180deg, color-mix(in oklab, #ffffff 75%, var(--accent) 20%), rgba(255,255,255,.74));
+      font-weight: 750;
+    }
+
+    .midbar{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      padding:0 14px 10px; flex-wrap:wrap;
+    }
+    .pills{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px; border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.70);
+      user-select:none;
+      font-size:13px;
+      color: var(--muted);
+      box-shadow: 0 1px 0 rgba(255,255,255,.9) inset;
+    }
+    .dot{ width:9px; height:9px; border-radius:50%; background: var(--muted); }
+    .dot.good{ background: var(--good); }
+    .dot.bad{ background: var(--bad); }
+    .dot.warn{ background: var(--warn); }
+
+    .feedback{
+      border-top:1px solid var(--border);
+      padding:10px 14px;
+      background: rgba(255,255,255,.62);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .feedbackMain{ font-weight:800; font-size:13px; }
+    .feedbackDetail{ color:var(--muted); font-size:13px; line-height:1.35; }
+
+    .content{
+      display:grid; gap:12px; grid-template-columns: 1fr;
+      align-items:start;
+    }
+    @media (min-width:980px){
+      .content{ grid-template-columns: 1.25fr .75fr; }
+    }
+
+    .panel{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.66));
+      backdrop-filter: blur(8px);
+      overflow:hidden;
+    }
+    .panel h2{
+      margin:0; padding:11px 14px;
+      font-size:13px; color:var(--muted);
+      border-bottom:1px solid var(--border);
+      background: rgba(255,255,255,.66);
+      letter-spacing:.2px;
+    }
+    .panel .body{ padding:14px; display:grid; gap:12px; }
+
+    /* ---------- Cards (narrow + thick text, no font-size increase) ---------- */
+    .cardlist{ display:grid; gap:10px; justify-items:center; }
+    .card{
+      --c: #22c1d6;
+      width: min(var(--cardW), 100%);
+      border-radius: 16px;
+      border:1px solid color-mix(in oklab, var(--c) 35%, var(--border));
+      background:
+        radial-gradient(18px 18px at 18% 28%, rgba(255,255,255,.86), transparent 62%),
+        linear-gradient(180deg, color-mix(in oklab, rgba(255,255,255,.95) 82%, var(--c) 10%), rgba(255,255,255,.64));
+      box-shadow: 0 1px 0 rgba(255,255,255,.92) inset;
+      display:flex; align-items:center; gap:10px;
+      padding:12px 12px 12px 34px;
+      position:relative;
+      user-select:none;
+    }
+    .card::before{
+      content:"";
+      position:absolute; left:10px; top:10px; bottom:10px;
+      width:10px; border-radius:999px;
+      background: var(--c);
+      box-shadow: 0 0 0 2px rgba(255,255,255,.65) inset;
+    }
+    .handle{
+      width:34px; height:34px;
+      border-radius: 12px;
+      border:1px solid color-mix(in oklab, var(--c) 30%, var(--border));
+      background: rgba(255,255,255,.78);
+      display:grid; place-items:center;
+      font-weight:900;
+      color: color-mix(in oklab, var(--c) 75%, #111);
+      box-shadow: 0 1px 0 rgba(255,255,255,.92) inset;
+      flex:0 0 auto;
+    }
+    .txt{
+      flex:1;
+      text-align:left;
+      font-weight: 850; /* thicker text */
+      letter-spacing:.15px;
+      line-height:1.25;
+    }
+    .card[draggable="true"]{ cursor:grab; }
+    .card.dragging{ opacity:.70; outline:2px dashed color-mix(in oklab, var(--c) 55%, var(--border)); outline-offset:3px; }
+    .card:active{ cursor:grabbing; }
+
+    .hint{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    /* ---------- Level 5 dropdown layout ---------- */
+    .qaRow{
+      width: min(860px, 100%);
+      display:grid;
+      grid-template-columns: 1fr minmax(220px, 280px);
+      gap:10px;
+      align-items:center;
+    }
+    @media (max-width:800px){
+      .qaRow{ grid-template-columns: 1fr; }
+    }
+    .qaSelect{
+      width:100%;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.82);
+      font-weight: 800;
+    }
+
+    /* ---------- Overlay base ---------- */
+    .overlay{
+      position:fixed; inset:0;
+      z-index:9999;
+      display:grid; place-items:center;
+    }
+    .overlay.hidden{ display:none; }
+    .overlayCard{
+      width:min(760px, 92vw);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius: 22px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      background: rgba(255,255,255,.10);
+      backdrop-filter: blur(12px);
+      padding: 18px 18px 16px;
+      color: #f8fafc;
+      position:relative;
+    }
+    .overlayCard h3{ margin:0 0 8px; font-size:18px; letter-spacing:.2px; }
+    .overlayCard p{ margin:0 0 12px; color: rgba(248,250,252,.86); line-height:1.35; }
+    .overlayActions{ display:flex; gap:10px; flex-wrap:wrap; }
+    .overlayInput{
+      width:100%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.14);
+      color:#fff;
+      font-weight: 800;
+      outline:none;
+    }
+    .overlayBtn{
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.16);
+      color:#fff;
+      padding: 10px 12px;
+      font-weight: 850;
+      cursor:pointer;
+    }
+    .overlayBtn.primary{
+      border-color: rgba(34,193,214,.65);
+      background: linear-gradient(180deg, rgba(34,193,214,.38), rgba(255,255,255,.14));
+    }
+    .overlayBtn:active{ transform: translateY(1px); }
+
+    /* ---------- Splash (Phanerozoic!) ---------- */
+    .splashTitle{
+      font-size: clamp(44px, 7vw, 86px);
+      font-weight: 950;
+      letter-spacing: .6px;
+      margin: 0 0 6px;
+      text-shadow: 0 10px 50px rgba(0,0,0,.35);
+      display:inline-block;
+      animation: wiggle 1.6s ease-in-out infinite;
+      transform-origin: 50% 60%;
+    }
+    @keyframes wiggle{
+      0%{ transform: rotate(-1.2deg) translateY(0); }
+      30%{ transform: rotate(1.6deg) translateY(-2px); }
+      60%{ transform: rotate(-1.0deg) translateY(1px); }
+      100%{ transform: rotate(-1.2deg) translateY(0); }
+    }
+    .splashHint{
+      font-weight: 850;
+      letter-spacing:.25px;
+      opacity: .92;
+    }
+    .splashHint small{
+      display:block;
+      font-weight:700;
+      opacity:.85;
+      margin-top:6px;
+    }
+
+    /* ---------- Firefly canvases ---------- */
+    canvas.full{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      display:block;
+    }
+
+    /* ---------- Bonus Level 7 slide-up canvas ---------- */
+    .lvl7{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      height: 100vh;
+      transform: translateY(100%);
+      transition: transform .55s ease;
+      z-index:9998;
+      background:#000;
+      overflow:hidden;
+    }
+    .lvl7.show{ transform: translateY(0); }
+    .lvl7UI{
+      position:absolute; inset:0;
+      display:grid;
+      grid-template-rows: 1fr auto;
+      pointer-events:none;
+    }
+    .lvl7Center{
+      display:grid; place-items:center;
+      padding: 18px;
+      pointer-events:none;
+    }
+    .lvl7Card{
+      width:min(820px, 92vw);
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 18px 80px rgba(0,0,0,.6);
+      padding: 16px;
+      color:#fff;
+      pointer-events:auto;
+    }
+    .lvl7Card h3{ margin:0 0 6px; font-size:16px; letter-spacing:.2px; }
+    .lvl7Prompt{
+      margin: 0 0 10px;
+      opacity:.88;
+      font-size:13px;
+      line-height:1.35;
+    }
+    .choiceGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      align-items:stretch;
+    }
+    @media(max-width:700px){ .choiceGrid{ grid-template-columns:1fr; } }
+    .qTag{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      font-weight: 900;
+      letter-spacing:.5px;
+      font-size:12px;
+      margin-bottom:10px;
+    }
+    .choiceBtn{
+      width:100%;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      color:#fff;
+      padding: 14px 14px;
+      font-weight: 900;
+      letter-spacing:.2px;
+      cursor:pointer;
+      text-align:center;
+    }
+    .choiceBtn:active{ transform: translateY(1px); }
+    .lvl7Stats{
+      display:flex; gap:10px; justify-content:space-between; flex-wrap:wrap;
+      padding: 10px 12px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.35);
+      color:#fff;
+      pointer-events:auto;
+      font-size:13px;
+      font-weight: 850;
+    }
+
+    /* tiny shake for wrong feedback */
+    .shake{ animation: shake .22s linear 2; }
+    @keyframes shake{
+      0%{ transform: translateX(0); }
+      25%{ transform: translateX(-4px); }
+      50%{ transform: translateX(4px); }
+      75%{ transform: translateX(-3px); }
+      100%{ transform: translateX(0); }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="app">
-        <header>
-            <div class="headerTop">
-                <div class="titleWrap">
-                    <h1 id="levelTitle">Level</h1>
-                    <p class="sub" id="levelDesc"></p>
-                </div>
-
-                <div class="headerControls">
-                    <select id="levelSelect" title="Choose a level"></select>
-                    <button id="btnPrev" class="btnGhost" title="Previous level">◀</button>
-                    <button id="btnNext" class="btnGhost" title="Next level">▶</button>
-                    <button id="btnShuffle" class="btnGhost" title="Shuffle cards">Shuffle</button>
-                    <button id="btnReset" class="btnGhost" title="Start this level over">Reset</button>
-                    <button id="btnSubmit" class="btnPrimary">Submit</button>
-                </div>
-            </div>
-
-            <div class="headerMid">
-                <div class="pills">
-                    <span class="pill"><span class="dot" id="statusDot"></span><span id="statusText">Ready</span></span>
-                    <span class="pill"><span class="dot warn"></span><span>Level: <span id="levelNum">1</span>/<span
-                                id="levelTotal">1</span></span></span>
-                    <span class="pill"><span class="dot warn"></span><span>Attempts: <span
-                                id="attempts">0</span></span></span>
-                    <span class="pill" id="timerPill" style="display:none;"><span class="dot warn"></span><span>Time:
-                            <span id="timeLeft">--</span></span></span>
-                    <span class="pill" id="bestPill" style="display:none;"><span class="dot good"></span><span>Best:
-                            <span id="bestTime">--</span></span></span>
-                </div>
-
-                <div class="toggles">
-                    <label><input type="checkbox" id="challengeToggle" /> Challenge mode (timer + penalties)</label>
-                    <label><input type="checkbox" id="hintsToggle" /> Practice hint: show “# correct positions”</label>
-                </div>
-            </div>
-
-            <div class="feedback" id="feedback">
-                <div class="feedbackBox">
-                    <div class="badge" id="feedbackBadge">🫧</div>
-                    <div class="feedbackText">
-                        <div class="main" id="feedbackMain">Ready</div>
-                        <div class="detail" id="feedbackDetail">Drag cards to reorder, then press Submit.</div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <div class="content">
-            <section class="panel">
-                <h2>Work Area</h2>
-                <div class="body" id="workBody"></div>
-            </section>
-
-            <aside class="panel">
-                <h2>Help</h2>
-                <div class="body">
-                    <details open>
-                        <summary>How to use this</summary>
-                        <div class="rules">
-                            <div class="rule"><strong>Goal:</strong> order the cards correctly for the current level.
-                            </div>
-                            <div class="rule"><strong>Drag:</strong> click and drag a card up/down to reorder. Keyboard
-                                fallback: focus a card, press <strong>↑</strong>/<strong>↓</strong>.</div>
-                            <div class="rule"><strong>Anti-gaming:</strong> the activity does not reveal which card is
-                                wrong. In Challenge mode, wrong submits add time penalties and reshuffle.</div>
-                            <div class="rule"><strong>Reference:</strong> students should use NYSSLS ESSRT v1.3 (2024)
-                                page 6 “Geologic History”.</div>
-                        </div>
-                    </details>
-
-                    <div class="hint">
-                        Teacher note: change labels in code at <code>PACKED_DATA</code> (Base64 JSON).
-                    </div>
-                </div>
-            </aside>
-        </div>
+  <!-- Splash screen -->
+  <div id="splash" class="overlay" aria-modal="true" role="dialog">
+    <canvas id="splashCanvas" class="full"></canvas>
+    <div class="overlayCard" style="text-align:center;">
+      <div class="splashTitle">Phanerozoic!</div>
+      <div class="splashHint">Click to begin
+        <small>(Use NYSSLS ESSRT v1.3 (2024), page 6 “Geologic History”.)</small>
+      </div>
+      <div style="margin-top:14px; opacity:.85; font-size:12px; line-height:1.35;">
+        Tip: drag the cards to reorder. Level 5 uses dropdowns. Bonus Level 7 unlocks after Level 6.
+      </div>
+      <div style="margin-top:14px;">
+        <button id="btnBegin" class="overlayBtn primary" type="button">Begin</button>
+      </div>
     </div>
-
-    <script type="module">
-        (function () {
-            /* =========================================================
-               DATA (packed)
-               One Life-on-Earth label per period, as requested.
-               Periods: Cambrian → Quaternary (inclusive).
-               ========================================================= */
-            const PACKED_DATA =
-                "eyJwZXJpb2RzIjpbIkNhbWJyaWFuIiwiT3Jkb3ZpY2lhbiIsIlNpbHVyaWFuIiwiRGV2b25pYW4iLCJNaXNzaXNzaXBwaWFuIiwiUGVubnN5bHZhbmlhbiIsIlBlcm1pYW4iLCJUcmlhc3NpYyIsIkp1cmFzc2ljIiwiQ3JldGFjZW91cyIsIlBhbGVvZ2VuZSIsIk5lb2dlbmUiLCJRdWF0ZXJuYXJ5Il0sImxpZmUiOnsiQ2FtYnJpYW4iOiJGaXJzdCBsaWZlIGZvcm1zIHdpdGggaGFyZCBzaGVsbHMiLCJPcmRvdmljaWFuIjoiRWFydGgncyBmaXJzdCByZWVmLWNvbnRhaW5pbmcgY29yYWxzLCBmaXJzdCBsYW5kIHBsYW50cyIsIlNpbHVyaWFuIjoiRWFybGllc3QgZmlzaCB3aXRoIGphd3M7IGZpcnN0IHZhc2N1bGFyIHBsYW50cyIsIkRldm9uaWFuIjoiRWFydGgncyBlYXJsaWVzdCBmb3Jlc3RzIC0gR2lsYm9hIGFuZCBDYWlybywgTlkiLCJNaXNzaXNzaXBwaWFuIjoiRWFybGllc3QgcmVwdGlsZXMiLCJQZW5uc3lsdmFuaWFuIjoiRXh0ZW5zaXZlIGNvYWwtZm9ybWluZyB2ZWdldGF0aW9uIGluIHN3YW1wcyIsIlBlcm1pYW4iOiJMYXJnZXN0IG1hc3MgZXh0aW5jdGlvbiBvZiBtYW55IGxhbmQgYW5kIG1hcmluZSBwbGFudHMgYW5kIGFuaW1hbHMiLCJUcmlhc3NpYyI6IkVhcmxpZXN0IG1hbW1hbHMiLCJKdXJhc3NpYyI6IkVhcmxpZXN0IGJpcmRzOyBwZWFrIG9mIHNhdXJvcG9kcyBhbmQgYW1tb25vaWRzIiwiQ3JldGFjZW91cyI6IkVhcmxpZXN0IGZsb3dlcmluZyBwbGFudHMiLCJQYWxlb2dlbmUiOiJGaXJzdCBob3JzZXMgYW5kIHdoYWxlcyIsIk5lb2dlbmUiOiJMYXJnZSBjYXJuaXZvcm91cyBtYW1tYWxzOyBkaXZlcnNlIGh1bWFuIGFuY2VzdG9ycyIsIlF1YXRlcm5hcnkiOiJIdW1hbnMsIG1hbW1vdGhzLCBnaWFudCBiZWF2ZXIifX0=";
-
-            const $ = (sel, root = document) => root.querySelector(sel);
-            const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-            const enc = new TextEncoder();
-
-            function b64ToUtf8(b64) {
-                const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-                return new TextDecoder().decode(bytes);
-            }
-            const DATA = JSON.parse(b64ToUtf8(PACKED_DATA));
-
-            const PERIODS_OLD_TO_YOUNG = DATA.periods.slice();
-            const PERIODS_YOUNG_TO_OLD = DATA.periods.slice().reverse();
-            const LIFE_BY_PERIOD = DATA.life;
-
-            /* =========================================================
-               UNIQUE COLORS PER PERIOD (stable across levels)
-               - Mapping is intentionally non-“rainbow order” so hue does
-                 not imply chronological order.
-               ========================================================= */
-            const PERIOD_PALETTE = [
-                "#06b6d4", // cyan
-                "#f97316", // orange
-                "#22c55e", // green
-                "#a78bfa", // lavender
-                "#ef4444", // red
-                "#3b82f6", // blue
-                "#eab308", // yellow
-                "#14b8a6", // teal
-                "#f43f5e", // pink
-                "#84cc16", // lime
-                "#8b5cf6", // violet
-                "#f59e0b", // amber
-                "#0ea5e9"  // sky
-            ];
-            // Assign colors by period index (stable) but palette order is mixed.
-            const PERIOD_COLOR = new Map(PERIODS_OLD_TO_YOUNG.map((p, i) => [p, PERIOD_PALETTE[i % PERIOD_PALETTE.length]]));
-            const colorForPeriod = (periodKey) => PERIOD_COLOR.get(periodKey) || "#06b6d4";
-
-            // -------------------------
-            // Levels
-            // -------------------------
-            const LEVELS = [
-                {
-                    id: "L1",
-                    title: "Level 1 — Period names (Oldest → Youngest)",
-                    desc: "Unshuffle the period names from Cambrian through Quaternary and place them in order from oldest to youngest.",
-                    kind: "sort",
-                    buildItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ text: p, key: p })),
-                    expectedKeys: () => PERIODS_OLD_TO_YOUNG.slice()
-                },
-                {
-                    id: "L2",
-                    title: "Level 2 — Period names (Youngest → Oldest)",
-                    desc: "Unshuffle the period names and place them in order from youngest to oldest.",
-                    kind: "sort",
-                    buildItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ text: p, key: p })),
-                    expectedKeys: () => PERIODS_YOUNG_TO_OLD.slice()
-                },
-                {
-                    id: "L3",
-                    title: "Level 3 — Life on Earth (Youngest → Oldest)",
-                    desc: "Unshuffle the Life-on-Earth labels (one per period) and place them in order from youngest to oldest. Use ESSRT page 6.",
-                    kind: "sort",
-                    buildItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ text: LIFE_BY_PERIOD[p], key: p })), // key = period
-                    expectedKeys: () => PERIODS_YOUNG_TO_OLD.slice()
-                },
-                {
-                    id: "L4",
-                    title: "Level 4 — Life on Earth (Oldest → Youngest)",
-                    desc: "Unshuffle the Life-on-Earth labels (one per period) and place them in order from oldest to youngest.",
-                    kind: "sort",
-                    buildItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ text: LIFE_BY_PERIOD[p], key: p })),
-                    expectedKeys: () => PERIODS_OLD_TO_YOUNG.slice()
-                },
-                {
-                    id: "L5",
-                    title: "Level 5 — Match: Life label → Period",
-                    desc: "Drag each Life-on-Earth label into the correct period row (Cambrian → Quaternary).",
-                    kind: "match",
-                    rowOrder: () => PERIODS_OLD_TO_YOUNG.slice(),
-                    buildCards: () => PERIODS_OLD_TO_YOUNG.map(p => ({ text: LIFE_BY_PERIOD[p], key: p })),
-                    expectedRowKeys: () => PERIODS_OLD_TO_YOUNG.slice()
-                },
-                {
-                    id: "L6",
-                    title: "Level 6 — Speed Run (Random direction)",
-                    desc: "The game picks the direction (oldest→youngest or youngest→oldest). Beat the clock. Wrong submissions add penalties and reshuffle.",
-                    kind: "sort",
-                    speedRun: true,
-                    buildItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ text: p, key: p })),
-                    expectedKeys: (dir) => (dir === "old2young" ? PERIODS_OLD_TO_YOUNG.slice() : PERIODS_YOUNG_TO_OLD.slice())
-                }
-            ];
-
-            // -------------------------
-            // UI elements
-            // -------------------------
-            const elTitle = $("#levelTitle");
-            const elDesc = $("#levelDesc");
-            const elWork = $("#workBody");
-
-            const elStatusDot = $("#statusDot");
-            const elStatusText = $("#statusText");
-
-            const elLevelNum = $("#levelNum");
-            const elLevelTotal = $("#levelTotal");
-            const elAttempts = $("#attempts");
-
-            const elFeedbackBadge = $("#feedbackBadge");
-            const elFeedbackMain = $("#feedbackMain");
-            const elFeedbackDetail = $("#feedbackDetail");
-
-            const levelSelect = $("#levelSelect");
-            const btnPrev = $("#btnPrev");
-            const btnNext = $("#btnNext");
-            const btnReset = $("#btnReset");
-            const btnShuffle = $("#btnShuffle");
-            const btnSubmit = $("#btnSubmit");
-
-            const chkChallenge = $("#challengeToggle");
-            const chkHints = $("#hintsToggle");
-            const timerPill = $("#timerPill");
-            const timeLeftEl = $("#timeLeft");
-            const bestPill = $("#bestPill");
-            const bestTimeEl = $("#bestTime");
-
-            // -------------------------
-            // State (kept in closure)
-            // -------------------------
-            let levelIndex = 0;
-
-            // attempts per level (does NOT reset on shuffle/wrong)
-            const attemptsByLevel = new Map();
-
-            // challenge timer
-            const CHALLENGE_SECONDS_DEFAULT = 75;
-            const WRONG_PENALTY_SECONDS = 7;
-            const LOCKOUT_MS = 650;
-
-            let timer = null;
-            let timeLeft = CHALLENGE_SECONDS_DEFAULT;
-            let lockoutUntil = 0;
-
-            // per-level run tokens
-            let sessionSalt = crypto.getRandomValues(new Uint8Array(16));
-            let expectedDigestHex = null;
-
-            // current run cards
-            let currentKind = null;
-            let currentDirection = "old2young";
-
-            // sort-mode
-            let sortListEl = null;
-
-            // match-mode
-            let poolEl = null;
-            let matchDropzones = []; // { periodKey, zoneEl }
-
-            // -------------------------
-            // Helpers
-            // -------------------------
-            function now() { return Date.now(); }
-
-            function setStatus(type, msg) {
-                elStatusDot.className = "dot";
-                if (type === "good") elStatusDot.classList.add("good");
-                else if (type === "bad") elStatusDot.classList.add("bad");
-                else if (type === "warn") elStatusDot.classList.add("warn");
-                elStatusText.textContent = msg;
-            }
-
-            function setFeedback(icon, main, detail) {
-                elFeedbackBadge.textContent = icon;
-                elFeedbackMain.textContent = main;
-                elFeedbackDetail.textContent = detail;
-            }
-
-            function shuffleInPlace(arr) {
-                for (let i = arr.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [arr[i], arr[j]] = [arr[j], arr[i]];
-                }
-                return arr;
-            }
-
-            function hexFromBytes(bytes) {
-                return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
-            }
-
-            async function sha256Hex(str) {
-                const buf = await crypto.subtle.digest("SHA-256", enc.encode(str));
-                return hexFromBytes(new Uint8Array(buf));
-            }
-
-            function fmtTime(sec) {
-                const s = Math.max(0, Math.floor(sec));
-                const m = Math.floor(s / 60);
-                const r = s % 60;
-                return `${m}:${String(r).padStart(2, "0")}`;
-            }
-
-            function getBestKey() {
-                const lvl = LEVELS[levelIndex];
-                const dir = lvl.speedRun ? currentDirection : "fixed";
-                return `geoSoapBest_${lvl.id}_${dir}`;
-            }
-
-            function updateBestUI() {
-                if (!chkChallenge.checked) {
-                    bestPill.style.display = "none";
-                    return;
-                }
-                const v = localStorage.getItem(getBestKey());
-                bestPill.style.display = v ? "inline-flex" : "none";
-                bestTimeEl.textContent = v || "--";
-            }
-
-            function setButtonsEnabled(enabled) {
-                btnSubmit.disabled = !enabled;
-                btnShuffle.disabled = !enabled;
-                btnReset.disabled = !enabled;
-                btnPrev.disabled = !enabled;
-                btnNext.disabled = !enabled;
-                levelSelect.disabled = !enabled;
-            }
-
-            function bumpAttempts() {
-                const id = LEVELS[levelIndex].id;
-                const n = (attemptsByLevel.get(id) || 0) + 1;
-                attemptsByLevel.set(id, n);
-                elAttempts.textContent = String(n);
-                return n;
-            }
-
-            function resetAttempts() {
-                const id = LEVELS[levelIndex].id;
-                attemptsByLevel.set(id, 0);
-                elAttempts.textContent = "0";
-            }
-
-            function paintCard(el, periodKey) {
-                el.style.setProperty("--cardColor", colorForPeriod(periodKey));
-            }
-
-            // -------------------------
-            // Timer (challenge mode)
-            // -------------------------
-            function clearTimer() {
-                if (timer) { clearInterval(timer); timer = null; }
-            }
-
-            function startTimer() {
-                clearTimer();
-                timeLeft = CHALLENGE_SECONDS_DEFAULT;
-                timeLeftEl.textContent = fmtTime(timeLeft);
-                timerPill.style.display = "inline-flex";
-                timer = setInterval(() => {
-                    timeLeft -= 1;
-                    timeLeftEl.textContent = fmtTime(timeLeft);
-                    if (timeLeft <= 0) {
-                        clearTimer();
-                        timeLeft = 0;
-                        timeLeftEl.textContent = fmtTime(timeLeft);
-                        setStatus("bad", "Time’s up");
-                        setFeedback("⏳", "Time’s up", "Cards reshuffled. Try again.");
-                        reshuffleCurrent(true);
-                        lockoutUntil = now() + LOCKOUT_MS;
-                        setButtonsEnabled(false);
-                        setTimeout(() => setButtonsEnabled(true), LOCKOUT_MS);
-                    }
-                }, 1000);
-            }
-
-            function stopTimer() {
-                clearTimer();
-                timerPill.style.display = "none";
-            }
-
-            function applyWrongPenalty() {
-                if (!chkChallenge.checked) return;
-                timeLeft = Math.max(0, timeLeft - WRONG_PENALTY_SECONDS);
-                timeLeftEl.textContent = fmtTime(timeLeft);
-                lockoutUntil = now() + LOCKOUT_MS;
-                setButtonsEnabled(false);
-                setTimeout(() => {
-                    if (now() >= lockoutUntil) setButtonsEnabled(true);
-                }, LOCKOUT_MS);
-            }
-
-            // -------------------------
-            // Drag sorting (sort mode)
-            // -------------------------
-            function wireSortDnD(listEl) {
-                let dragged = null;
-
-                function onDragStart(e) {
-                    const card = e.target.closest(".card");
-                    if (!card) return;
-                    dragged = card;
-                    card.classList.add("dragging");
-                    e.dataTransfer?.setData("text/plain", "x");
-                    if (e.dataTransfer) e.dataTransfer.effectAllowed = "move";
-                }
-
-                function onDragEnd() {
-                    if (dragged) dragged.classList.remove("dragging");
-                    dragged = null;
-                }
-
-                function getAfter(container, y) {
-                    const els = [...container.querySelectorAll(".card:not(.dragging)")];
-                    let closest = { offset: Number.NEGATIVE_INFINITY, el: null };
-                    for (const el of els) {
-                        const box = el.getBoundingClientRect();
-                        const offset = y - (box.top + box.height / 2);
-                        if (offset < 0 && offset > closest.offset) {
-                            closest = { offset, el };
-                        }
-                    }
-                    return closest.el;
-                }
-
-                function onDragOver(e) {
-                    e.preventDefault();
-                    if (!dragged) return;
-                    const after = getAfter(listEl, e.clientY);
-                    if (after == null) listEl.appendChild(dragged);
-                    else listEl.insertBefore(dragged, after);
-                }
-
-                listEl.addEventListener("dragstart", onDragStart);
-                listEl.addEventListener("dragend", onDragEnd);
-                listEl.addEventListener("dragover", onDragOver);
-
-                // keyboard fallback
-                listEl.addEventListener("keydown", (e) => {
-                    const card = e.target.closest(".card");
-                    if (!card) return;
-                    if (e.key === "ArrowUp") {
-                        e.preventDefault();
-                        const prev = card.previousElementSibling;
-                        if (prev) listEl.insertBefore(card, prev);
-                    } else if (e.key === "ArrowDown") {
-                        e.preventDefault();
-                        const next = card.nextElementSibling;
-                        if (next) listEl.insertBefore(next, card);
-                    }
-                });
-            }
-
-            // -------------------------
-            // Match mode helpers
-            // -------------------------
-            function makeDraggableCard(text, id, periodKey) {
-                const card = document.createElement("div");
-                card.className = "card";
-                card.setAttribute("draggable", "true");
-                card.tabIndex = 0;
-                card.dataset.k = id;     // opaque id (anti-gaming)
-                paintCard(card, periodKey);
-
-                const handle = document.createElement("div");
-                handle.className = "handle";
-                handle.textContent = "⋮⋮";
-
-                const txt = document.createElement("div");
-                txt.className = "txt";
-                txt.textContent = text;
-
-                card.append(handle, txt);
-                return card;
-            }
-
-            function wireMatchDnD() {
-                let dragged = null;
-
-                function onDragStart(e) {
-                    const card = e.target.closest(".card");
-                    if (!card) return;
-                    dragged = card;
-                    card.classList.add("dragging");
-                    e.dataTransfer?.setData("text/plain", "x");
-                    if (e.dataTransfer) e.dataTransfer.effectAllowed = "move";
-                }
-                function onDragEnd() {
-                    if (dragged) dragged.classList.remove("dragging");
-                    dragged = null;
-                    $$(".dropzone", elWork).forEach(z => z.classList.remove("over"));
-                }
-
-                poolEl.addEventListener("dragstart", onDragStart);
-                elWork.addEventListener("dragstart", onDragStart);
-                poolEl.addEventListener("dragend", onDragEnd);
-                elWork.addEventListener("dragend", onDragEnd);
-
-                matchDropzones.forEach(({ zoneEl }) => {
-                    zoneEl.addEventListener("dragover", (e) => { e.preventDefault(); zoneEl.classList.add("over"); });
-                    zoneEl.addEventListener("dragleave", () => zoneEl.classList.remove("over"));
-                    zoneEl.addEventListener("drop", (e) => {
-                        e.preventDefault();
-                        zoneEl.classList.remove("over");
-                        if (!dragged) return;
-
-                        const existing = zoneEl.querySelector(".card");
-                        if (existing) poolEl.appendChild(existing);
-
-                        zoneEl.innerHTML = "";
-                        zoneEl.appendChild(dragged);
-                        zoneEl.classList.add("filled");
-                    });
-                });
-
-                poolEl.addEventListener("dragover", (e) => e.preventDefault());
-                poolEl.addEventListener("drop", (e) => {
-                    e.preventDefault();
-                    if (!dragged) return;
-                    poolEl.appendChild(dragged);
-                    refreshDropzonePlaceholders();
-                });
-            }
-
-            function refreshDropzonePlaceholders() {
-                matchDropzones.forEach(({ zoneEl }) => {
-                    if (zoneEl.querySelector(".card")) {
-                        zoneEl.classList.add("filled");
-                    } else {
-                        zoneEl.classList.remove("filled");
-                        zoneEl.innerHTML = `<span class="placeholder">Drop here</span>`;
-                    }
-                });
-            }
-
-            // -------------------------
-            // Expected digest (anti-trivial DOM exploits)
-            // -------------------------
-            async function buildExpectedDigestForSort(cards, expectedKeys) {
-                const idByKey = new Map(cards.map(c => [c.key, c.id]));
-                const correctIds = expectedKeys.map(k => idByKey.get(k));
-                const payload = correctIds.join("|") + "|" + hexFromBytes(sessionSalt);
-                return await sha256Hex(payload);
-            }
-
-            async function buildExpectedDigestForMatch(idByPeriodKey, rowKeys) {
-                const correctIds = rowKeys.map(k => idByPeriodKey.get(k));
-                const payload = correctIds.join("|") + "|" + hexFromBytes(sessionSalt);
-                return await sha256Hex(payload);
-            }
-
-            // -------------------------
-            // Render + reshuffle without resetting attempts
-            // -------------------------
-            function populateLevelSelect() {
-                levelSelect.innerHTML = "";
-                LEVELS.forEach((lvl, idx) => {
-                    const opt = document.createElement("option");
-                    opt.value = String(idx);
-                    opt.textContent = `${idx + 1}. ${lvl.title.replace(/^Level \d+ — /, "")}`;
-                    levelSelect.appendChild(opt);
-                });
-            }
-
-            function clearWork() {
-                elWork.innerHTML = "";
-                sortListEl = null;
-                poolEl = null;
-                matchDropzones = [];
-            }
-
-            async function buildLevel(fromScratch = true) {
-                const lvl = LEVELS[levelIndex];
-                currentKind = lvl.kind;
-
-                if (lvl.speedRun) {
-                    currentDirection = (Math.random() < 0.5) ? "old2young" : "young2old";
-                } else {
-                    currentDirection = "old2young";
-                }
-
-                elTitle.textContent = lvl.title + (lvl.speedRun ? ` (${currentDirection === "old2young" ? "Oldest → Youngest" : "Youngest → Oldest"})` : "");
-                elDesc.textContent = lvl.desc;
-
-                elLevelNum.textContent = String(levelIndex + 1);
-                elLevelTotal.textContent = String(LEVELS.length);
-
-                levelSelect.value = String(levelIndex);
-
-                const a = attemptsByLevel.get(lvl.id) || 0;
-                elAttempts.textContent = String(a);
-
-                if (fromScratch) {
-                    sessionSalt = crypto.getRandomValues(new Uint8Array(16));
-                    expectedDigestHex = null;
-                }
-
-                if (chkChallenge.checked) {
-                    startTimer();
-                } else {
-                    stopTimer();
-                }
-                updateBestUI();
-
-                setStatus("warn", "Ready");
-                setFeedback("🫧", "Ready", "Drag cards to reorder, then press Submit.");
-
-                clearWork();
-
-                if (lvl.kind === "sort") {
-                    const list = document.createElement("div");
-                    list.className = "cardlist";
-                    list.id = "cardList";
-                    sortListEl = list;
-
-                    const items = lvl.buildItems();
-                    const cards = items.map(it => ({ id: crypto.randomUUID(), key: it.key, text: it.text }));
-
-                    const order = cards.slice();
-                    shuffleInPlace(order);
-
-                    for (const c of order) {
-                        const card = document.createElement("div");
-                        card.className = "card";
-                        card.setAttribute("draggable", "true");
-                        card.tabIndex = 0;
-                        card.dataset.k = c.id; // opaque id only
-                        paintCard(card, c.key); // <-- unique color by period key
-
-                        const handle = document.createElement("div");
-                        handle.className = "handle";
-                        handle.textContent = "⋮⋮";
-
-                        const txt = document.createElement("div");
-                        txt.className = "txt";
-                        txt.textContent = c.text;
-
-                        card.append(handle, txt);
-                        list.appendChild(card);
-                    }
-
-                    elWork.appendChild(list);
-                    elWork.appendChild(Object.assign(document.createElement("div"), {
-                        className: "hint",
-                        textContent: "Tip: drag cards to reorder. Keyboard: focus a card, press ↑/↓."
-                    }));
-
-                    wireSortDnD(list);
-
-                    const expectedKeys = lvl.expectedKeys(lvl.speedRun ? currentDirection : undefined);
-                    expectedDigestHex = await buildExpectedDigestForSort(cards, expectedKeys);
-
-                } else if (lvl.kind === "match") {
-                    const pool = document.createElement("div");
-                    pool.className = "cardlist";
-                    pool.id = "pool";
-                    poolEl = pool;
-
-                    const rows = document.createElement("div");
-                    rows.className = "rows";
-
-                    const rowOrder = lvl.rowOrder();
-                    const cardModels = lvl.buildCards().map(it => ({ id: crypto.randomUUID(), key: it.key, text: it.text }));
-                    const idByPeriod = new Map(cardModels.map(c => [c.key, c.id]));
-
-                    const shuffled = cardModels.slice();
-                    shuffleInPlace(shuffled);
-                    for (const c of shuffled) {
-                        pool.appendChild(makeDraggableCard(c.text, c.id, c.key)); // color by period key
-                    }
-
-                    matchDropzones = [];
-                    for (const periodKey of rowOrder) {
-                        const row = document.createElement("div");
-                        row.className = "row";
-
-                        const left = document.createElement("div");
-                        left.className = "left";
-                        left.textContent = periodKey;
-                        left.style.setProperty("--rowColor", colorForPeriod(periodKey));
-
-                        const zone = document.createElement("div");
-                        zone.className = "dropzone";
-                        zone.dataset.period = periodKey;
-                        zone.style.setProperty("--rowColor", colorForPeriod(periodKey));
-                        zone.innerHTML = `<span class="placeholder">Drop here</span>`;
-
-                        row.append(left, zone);
-                        rows.appendChild(row);
-
-                        matchDropzones.push({ periodKey, zoneEl: zone });
-                    }
-
-                    elWork.appendChild(Object.assign(document.createElement("div"), {
-                        className: "hint",
-                        textContent: "Match mode: drag each Life label into the correct period row."
-                    }));
-                    elWork.appendChild(pool);
-                    elWork.appendChild(rows);
-
-                    wireMatchDnD();
-
-                    const expectedRowKeys = lvl.expectedRowKeys();
-                    expectedDigestHex = await buildExpectedDigestForMatch(idByPeriod, expectedRowKeys);
-                }
-            }
-
-            function reshuffleCurrent(fromWrong = false) {
-                if (currentKind === "sort" && sortListEl) {
-                    const cards = $$(".card", sortListEl);
-                    const shuffled = cards.slice();
-                    shuffleInPlace(shuffled);
-                    for (const c of shuffled) sortListEl.appendChild(c);
-
-                    if (fromWrong) {
-                        sortListEl.classList.remove("shake");
-                        void sortListEl.offsetWidth;
-                        sortListEl.classList.add("shake");
-                    }
-                }
-
-                if (currentKind === "match" && poolEl) {
-                    matchDropzones.forEach(({ zoneEl }) => {
-                        const c = zoneEl.querySelector(".card");
-                        if (c) poolEl.appendChild(c);
-                    });
-                    refreshDropzonePlaceholders();
-
-                    const poolCards = $$(".card", poolEl);
-                    const shuffled = poolCards.slice();
-                    shuffleInPlace(shuffled);
-                    for (const c of shuffled) poolEl.appendChild(c);
-
-                    if (fromWrong) {
-                        poolEl.classList.remove("shake");
-                        void poolEl.offsetWidth;
-                        poolEl.classList.add("shake");
-                    }
-                }
-            }
-
-            // -------------------------
-            // Answer checking
-            // -------------------------
-            async function submit() {
-                if (now() < lockoutUntil) return;
-
-                const lvl = LEVELS[levelIndex];
-                bumpAttempts();
-
-                btnSubmit.disabled = true;
-                setTimeout(() => btnSubmit.disabled = false, 220);
-
-                let ids = [];
-
-                if (lvl.kind === "sort") {
-                    ids = $$(".card", sortListEl).map(el => el.dataset.k);
-                } else {
-                    ids = matchDropzones.map(({ zoneEl }) => {
-                        const card = zoneEl.querySelector(".card");
-                        return card ? card.dataset.k : "";
-                    });
-                    if (ids.some(x => !x)) {
-                        setStatus("warn", "Incomplete");
-                        setFeedback("🫧", "Not yet", "Put a card in every row, then Submit.");
-                        if (chkChallenge.checked) {
-                            timeLeft = Math.max(0, timeLeft - 2);
-                            timeLeftEl.textContent = fmtTime(timeLeft);
-                        }
-                        return;
-                    }
-                }
-
-                const payload = ids.join("|") + "|" + hexFromBytes(sessionSalt);
-                const actual = await sha256Hex(payload);
-                const correct = (expectedDigestHex && actual === expectedDigestHex);
-
-                if (correct) {
-                    setStatus("good", "Correct");
-                    setFeedback("✅", "Correct", "Use Next to continue, or Shuffle/Reset to practice again.");
-                    if (chkChallenge.checked) {
-                        const score = fmtTime(timeLeft);
-                        const key = getBestKey();
-                        const prev = localStorage.getItem(key);
-
-                        const toSec = (mmss) => {
-                            const [m, s] = mmss.split(":").map(Number);
-                            return (m * 60 + s);
-                        };
-                        if (!prev || toSec(score) > toSec(prev)) {
-                            localStorage.setItem(key, score);
-                            updateBestUI();
-                        }
-                    }
-                    return;
-                }
-
-                setStatus("bad", "Incorrect");
-                applyWrongPenalty();
-
-                setFeedback("🧼", "Incorrect", "Not quite. Adjust your order and submit again.");
-                // DO NOT reshuffle on wrong
-
-            }
-
-            // -------------------------
-            // Navigation / buttons
-            // -------------------------
-            function populateLevelSelectOnce() {
-                levelSelect.innerHTML = "";
-                LEVELS.forEach((lvl, idx) => {
-                    const opt = document.createElement("option");
-                    opt.value = String(idx);
-                    opt.textContent = `${idx + 1}. ${lvl.title.replace(/^Level \d+ — /, "")}`;
-                    levelSelect.appendChild(opt);
-                });
-            }
-
-            function goTo(idx) {
-                levelIndex = Math.max(0, Math.min(LEVELS.length - 1, idx));
-                buildLevel(true);
-            }
-
-            btnPrev.addEventListener("click", () => { if (levelIndex > 0) goTo(levelIndex - 1); });
-            btnNext.addEventListener("click", () => { if (levelIndex < LEVELS.length - 1) goTo(levelIndex + 1); });
-
-            btnShuffle.addEventListener("click", () => {
-                setStatus("warn", "Shuffled");
-                setFeedback("🫧", "Shuffled", "Same level, new shuffle.");
-                reshuffleCurrent(false);
+  </div>
+
+  <div class="app" id="appRoot" aria-hidden="true">
+    <header>
+      <div class="topbar">
+        <div class="titleWrap">
+          <h1 id="levelTitle">Level</h1>
+          <p class="sub" id="levelDesc"></p>
+        </div>
+        <div class="controls">
+          <select id="levelSelect" title="Level" disabled></select>
+          <button id="btnReset" type="button">Reset</button>
+          <button id="btnShuffle" type="button">Shuffle</button>
+          <button id="btnSubmit" class="btnPrimary" type="button">Submit</button>
+          <button id="btnNext" class="btnPrimary" type="button" disabled>Next</button>
+        </div>
+      </div>
+
+      <div class="midbar">
+        <div class="pills">
+          <span class="pill"><span class="dot warn" id="statusDot"></span><span id="statusText">Ready</span></span>
+          <span class="pill"><span class="dot warn"></span><span>Level: <span id="levelNum">1</span>/<span id="levelTotal">6</span></span></span>
+          <span class="pill"><span class="dot warn"></span><span>Attempts: <span id="attempts">0</span></span></span>
+          <span class="pill" id="timerPill" style="display:none;"><span class="dot warn"></span><span>Time: <span id="timeLeft">--</span></span></span>
+        </div>
+      </div>
+
+      <div class="feedback">
+        <div>
+          <div class="feedbackMain" id="fbMain">Ready</div>
+          <div class="feedbackDetail" id="fbDetail">Complete the level, then press Submit.</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+      <section class="panel">
+        <h2>Work Area</h2>
+        <div class="body" id="work"></div>
+      </section>
+
+      <aside class="panel">
+        <h2>Help</h2>
+        <div class="body">
+          <div class="hint">
+            <div><strong>Reference:</strong> NYSSLS ESSRT v1.3 (2024), page 6 “Geologic History”.</div>
+            <div style="margin-top:8px;"><strong>Anti-gaming:</strong> the app does not reveal which specific items are wrong.</div>
+            <div style="margin-top:8px;"><strong>Keyboard:</strong> focus a card then use ↑/↓ to move it.</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Bonus Level 7 -->
+  <div id="lvl7" class="lvl7" aria-hidden="true">
+    <canvas id="lvl7Canvas" class="full"></canvas>
+    <div class="lvl7UI">
+      <div class="lvl7Center">
+        <div class="lvl7Card" id="lvl7Card">
+          <h3>Bonus Level 7 — Firefly Challenge</h3>
+          <p class="lvl7Prompt" id="lvl7Prompt">
+            A canvas slides up. Fireflies drift. You answer OLDER/YOUNGER questions until you reach <strong>15 correct</strong>.
+          </p>
+
+          <div id="lvl7StartArea">
+            <button id="btnLvl7Begin" class="choiceBtn" type="button">Begin Level 7</button>
+          </div>
+
+          <div id="lvl7GameArea" class="hidden" style="display:none;">
+            <div class="qTag" id="qTag">OLDER?</div>
+            <div class="choiceGrid">
+              <button class="choiceBtn" id="choiceA" type="button"></button>
+              <button class="choiceBtn" id="choiceB" type="button"></button>
+            </div>
+            <div style="margin-top:10px; font-weight:900;" id="lvl7ScoreLine">Score: 0 points</div>
+            <div style="margin-top:4px; opacity:.85; font-size:12px;" id="lvl7ProgressLine">Correct: 0 / 15</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lvl7Stats">
+        <div>Timer: <span id="lvl7Timer">0:00</span></div>
+        <div id="lvl7MiniStatus">Waiting…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Certificate overlay -->
+  <div id="certOverlay" class="overlay hidden" aria-modal="true" role="dialog">
+    <canvas id="certCanvas" class="full"></canvas>
+    <div class="overlayCard">
+      <h3>Achieved geologic greatness!</h3>
+      <p>Enter your name, then generate a Certificate of Achievement (PDF) to download and print.</p>
+      <label style="font-size:12px; font-weight:900; letter-spacing:.2px;">Student name</label>
+      <input id="studentName" class="overlayInput" type="text" autocomplete="name" placeholder="e.g., Alex Rivera" />
+      <div class="overlayActions" style="margin-top:12px;">
+        <button id="btnCert" class="overlayBtn primary" type="button">Generate Certificate (PDF)</button>
+        <button id="btnCertClose" class="overlayBtn" type="button">Close</button>
+      </div>
+      <div style="margin-top:10px; opacity:.85; font-size:12px;">
+        After download: open the PDF and print.
+      </div>
+    </div>
+  </div>
+
+  <!-- jsPDF -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+  <script type="module">
+    (function(){
+      "use strict";
+
+      /* =========================
+         DATA
+         ========================= */
+      const PERIODS_OLD_TO_YOUNG = [
+        "Cambrian","Ordovician","Silurian","Devonian","Mississippian","Pennsylvanian",
+        "Permian","Triassic","Jurassic","Cretaceous","Paleogene","Neogene","Quaternary"
+      ];
+      const PERIODS_YOUNG_TO_OLD = [...PERIODS_OLD_TO_YOUNG].reverse();
+
+      // One Life-on-Earth label per period (from ESSRT page 6 summary lines)
+      const LIFE_BY_PERIOD = new Map([
+        ["Cambrian","First life forms with hard shells"],
+        ["Ordovician","Earth’s first reef-containing corals; first land plants"],
+        ["Silurian","Earliest fish with jaws; first vascular plants"],
+        ["Devonian","Earth’s earliest forests – Gilboa and Cairo, NY"],
+        ["Mississippian","Earliest reptiles"],
+        ["Pennsylvanian","Extensive coal-forming vegetation in swamps"],
+        ["Permian","Largest mass extinction of many land and marine plants and animals"],
+        ["Triassic","Earliest mammals"],
+        ["Jurassic","Earliest birds; peak of sauropods and ammonoids"],
+        ["Cretaceous","Earliest flowering plants"],
+        ["Paleogene","First horses and whales"],
+        ["Neogene","Large carnivorous mammals; diverse human ancestors"],
+        ["Quaternary","Humans, mammoths, giant beaver"]
+      ]);
+
+      /* =========================
+         LEVELS (1–6)
+         ========================= */
+      const LEVELS = [
+        {
+          id:"L1",
+          title:"Level 1 — Period names (Oldest → Youngest)",
+          desc:"Unshuffle the period names and order them from oldest to youngest (Cambrian → Quaternary).",
+          type:"sort",
+          makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:p, key:p })),
+          expected:  () => PERIODS_OLD_TO_YOUNG
+        },
+        {
+          id:"L2",
+          title:"Level 2 — Period names (Youngest → Oldest)",
+          desc:"Unshuffle the period names and order them from youngest to oldest (Quaternary → Cambrian).",
+          type:"sort",
+          makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:p, key:p })),
+          expected:  () => PERIODS_YOUNG_TO_OLD
+        },
+        {
+          id:"L3",
+          title:"Level 3 — Life on Earth (Youngest → Oldest)",
+          desc:"Unshuffle the Life-on-Earth labels (one per period) and order them from youngest to oldest.",
+          type:"sort",
+          makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:LIFE_BY_PERIOD.get(p), key:p })),
+          expected:  () => PERIODS_YOUNG_TO_OLD
+        },
+        {
+          id:"L4",
+          title:"Level 4 — Life on Earth (Oldest → Youngest)",
+          desc:"Unshuffle the Life-on-Earth labels (one per period) and order them from oldest to youngest.",
+          type:"sort",
+          makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:LIFE_BY_PERIOD.get(p), key:p })),
+          expected:  () => PERIODS_OLD_TO_YOUNG
+        },
+        {
+          id:"L5",
+          title:"Level 5 — Select the period (Dropdown Match)",
+          desc:"For each Life-on-Earth label, select the correct geologic time period (one per card).",
+          type:"dropdown",
+          makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:LIFE_BY_PERIOD.get(p), key:p })),
+          expected:  () => PERIODS_OLD_TO_YOUNG
+        },
+        {
+          id:"L6",
+          title:"Level 6 — Speed Round (Timer + Penalty)",
+          desc:"Order the period names in the required direction before time runs out. Wrong submit adds a penalty. No reshuffle on wrong.",
+          type:"speed",
+          makeItems: () => PERIODS_OLD_TO_YOUNG.map(p => ({ label:p, key:p })),
+          // direction chosen per run
+        }
+      ];
+
+      /* =========================
+         DOM
+         ========================= */
+      const $ = (s, r=document) => r.querySelector(s);
+      const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+      const splash = $("#splash");
+      const btnBegin = $("#btnBegin");
+      const appRoot = $("#appRoot");
+
+      const levelTitle = $("#levelTitle");
+      const levelDesc  = $("#levelDesc");
+      const work = $("#work");
+
+      const levelSelect = $("#levelSelect");
+      const btnReset = $("#btnReset");
+      const btnShuffle = $("#btnShuffle");
+      const btnSubmit = $("#btnSubmit");
+      const btnNext = $("#btnNext");
+
+      const statusDot = $("#statusDot");
+      const statusText = $("#statusText");
+      const levelNum = $("#levelNum");
+      const levelTotal = $("#levelTotal");
+      const attemptsEl = $("#attempts");
+      const timerPill = $("#timerPill");
+      const timeLeftEl = $("#timeLeft");
+      const fbMain = $("#fbMain");
+      const fbDetail = $("#fbDetail");
+
+      // Bonus 7
+      const lvl7 = $("#lvl7");
+      const btnLvl7Begin = $("#btnLvl7Begin");
+      const lvl7StartArea = $("#lvl7StartArea");
+      const lvl7GameArea = $("#lvl7GameArea");
+      const qTag = $("#qTag");
+      const choiceA = $("#choiceA");
+      const choiceB = $("#choiceB");
+      const lvl7ScoreLine = $("#lvl7ScoreLine");
+      const lvl7ProgressLine = $("#lvl7ProgressLine");
+      const lvl7TimerEl = $("#lvl7Timer");
+      const lvl7MiniStatus = $("#lvl7MiniStatus");
+
+      // Certificate
+      const certOverlay = $("#certOverlay");
+      const btnCert = $("#btnCert");
+      const btnCertClose = $("#btnCertClose");
+      const studentName = $("#studentName");
+
+      /* =========================
+         Firefly field (reused)
+         ========================= */
+      class FireflyField{
+        constructor(canvas, opts={}){
+          this.canvas = canvas;
+          this.ctx = canvas.getContext("2d");
+          this.opts = {
+            count: opts.count ?? 95,
+            bg: opts.bg ?? "rgba(0,0,0,1)",
+            glow: opts.glow ?? "rgba(255,220,140,",
+            speed: opts.speed ?? 0.25,
+            jitter: opts.jitter ?? 0.08
+          };
+          this.flies = [];
+          this.running = false;
+          this._raf = 0;
+          this._resize = this.resize.bind(this);
+          window.addEventListener("resize", this._resize);
+          this.resize();
+          this.seed();
+        }
+        resize(){
+          const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+          const rect = this.canvas.getBoundingClientRect();
+          this.canvas.width = Math.floor(rect.width * dpr);
+          this.canvas.height = Math.floor(rect.height * dpr);
+          this.ctx.setTransform(dpr,0,0,dpr,0,0);
+          this.w = rect.width; this.h = rect.height;
+        }
+        seed(){
+          this.flies = [];
+          for(let i=0;i<this.opts.count;i++){
+            this.flies.push({
+              x: Math.random()*this.w,
+              y: Math.random()*this.h,
+              vx:(Math.random()-0.5)*this.opts.speed,
+              vy:(Math.random()-0.5)*this.opts.speed,
+              r: 0.9 + Math.random()*1.8,
+              a: 0.20 + Math.random()*0.55,
+              tw: Math.random()*Math.PI*2
             });
+          }
+        }
+        start(){
+          if(this.running) return;
+          this.running = true;
+          const tick = () => {
+            if(!this.running) return;
+            this.step();
+            this._raf = requestAnimationFrame(tick);
+          };
+          this._raf = requestAnimationFrame(tick);
+        }
+        stop(){
+          this.running = false;
+          cancelAnimationFrame(this._raf);
+        }
+        step(){
+          const c = this.ctx;
+          // background
+          c.fillStyle = this.opts.bg;
+          c.fillRect(0,0,this.w,this.h);
 
-            btnReset.addEventListener("click", () => {
-                resetAttempts();
-                setStatus("warn", "Reset");
-                setFeedback("🫧", "Reset", "Fresh start for this level.");
-                buildLevel(true);
-            });
+          for(const f of this.flies){
+            // brownian jitter
+            f.vx += (Math.random()-0.5)*this.opts.jitter;
+            f.vy += (Math.random()-0.5)*this.opts.jitter;
 
-            btnSubmit.addEventListener("click", () => submit());
+            // clamp velocity
+            const vMax = this.opts.speed*2.3;
+            f.vx = Math.max(-vMax, Math.min(vMax, f.vx));
+            f.vy = Math.max(-vMax, Math.min(vMax, f.vy));
 
-            levelSelect.addEventListener("change", () => {
-                const idx = Number(levelSelect.value);
-                goTo(idx);
-            });
+            f.x += f.vx; f.y += f.vy;
 
-            chkChallenge.addEventListener("change", () => {
-                setFeedback("🫧", "Mode changed", chkChallenge.checked ? "Challenge mode ON (timer + penalties)." : "Challenge mode OFF.");
-                buildLevel(true);
-            });
+            // wrap
+            if(f.x < -10) f.x = this.w+10;
+            if(f.x > this.w+10) f.x = -10;
+            if(f.y < -10) f.y = this.h+10;
+            if(f.y > this.h+10) f.y = -10;
 
-            // -------------------------
-            // Init
-            // -------------------------
-            function init() {
-                populateLevelSelectOnce();
-                LEVELS.forEach(l => attemptsByLevel.set(l.id, 0));
-                $("#levelTotal").textContent = String(LEVELS.length);
-                goTo(0);
+            // sparkle
+            f.tw += 0.06 + Math.random()*0.04;
+            const a = Math.max(0, Math.min(1, f.a + 0.25*Math.sin(f.tw)));
+
+            // glow dot
+            c.beginPath();
+            c.fillStyle = this.opts.glow + a.toFixed(3) + ")";
+            c.arc(f.x, f.y, f.r, 0, Math.PI*2);
+            c.fill();
+          }
+        }
+      }
+
+      /* =========================
+         Utilities
+         ========================= */
+      const COLOR_POOL = [
+        "#06b6d4","#f97316","#22c55e","#a78bfa","#ef4444","#3b82f6",
+        "#eab308","#14b8a6","#f43f5e","#84cc16","#8b5cf6","#f59e0b","#0ea5e9"
+      ];
+      function shuffle(arr){
+        for(let i=arr.length-1;i>0;i--){
+          const j = Math.floor(Math.random()*(i+1));
+          [arr[i],arr[j]] = [arr[j],arr[i]];
+        }
+        return arr;
+      }
+      function fmtTime(sec){
+        const s = Math.max(0, Math.floor(sec));
+        const m = Math.floor(s/60);
+        const r = s%60;
+        return `${m}:${String(r).padStart(2,"0")}`;
+      }
+      function setStatus(kind, text){
+        statusDot.className = "dot";
+        statusDot.classList.add(kind==="good"?"good":kind==="bad"?"bad":"warn");
+        statusText.textContent = text;
+      }
+      function setFeedback(main, detail){
+        fbMain.textContent = main;
+        fbDetail.textContent = detail;
+      }
+
+      /* =========================
+         State (kept private)
+         ========================= */
+      let lvlIndex = 0;
+      let attempts = Array(LEVELS.length).fill(0);
+      let completed = Array(LEVELS.length).fill(false);
+
+      // current render internals
+      let currentType = null;
+      let cardKeyById = new Map();     // cardId -> periodKey
+      let currentExpected = [];        // array of periodKeys in expected order
+      let currentDirection = "old2young";
+
+      // timer for Level 6
+      let speedTimer = null;
+      let speedTimeLeft = 60;          // seconds
+      const SPEED_PENALTY = 6;
+
+      // fireflies
+      let splashField = null;
+      let certField = null;
+      let lvl7Field = null;
+
+      /* =========================
+         Rendering
+         ========================= */
+      function populateSelect(){
+        levelSelect.innerHTML = "";
+        LEVELS.forEach((L, i)=>{
+          const o = document.createElement("option");
+          o.value = String(i);
+          o.textContent = `${i+1}. ${L.title.replace(/^Level \d+ — /,"")}`;
+          levelSelect.appendChild(o);
+        });
+      }
+
+      function makeCard({id, label, color, draggable=true}){
+        const card = document.createElement("div");
+        card.className = "card";
+        card.style.setProperty("--c", color);
+        card.dataset.id = id;
+        card.tabIndex = 0;
+        if(draggable) card.setAttribute("draggable","true");
+
+        const h = document.createElement("div");
+        h.className = "handle";
+        h.textContent = "⋮⋮";
+
+        const t = document.createElement("div");
+        t.className = "txt";
+        t.textContent = label;
+
+        card.append(h,t);
+        return card;
+      }
+
+      function clearWork(){
+        work.innerHTML = "";
+        cardKeyById = new Map();
+      }
+
+      function renderLevel(){
+        const L = LEVELS[lvlIndex];
+        currentType = L.type;
+
+        levelTitle.textContent = L.title;
+        levelDesc.textContent = L.desc;
+        levelNum.textContent = String(lvlIndex+1);
+        levelTotal.textContent = String(LEVELS.length);
+        attemptsEl.textContent = String(attempts[lvlIndex]);
+        levelSelect.value = String(lvlIndex);
+
+        btnNext.disabled = !completed[lvlIndex];
+        setStatus("warn","Ready");
+        setFeedback("Ready","Complete the level, then press Submit.");
+
+        clearWork();
+        stopSpeedTimer();
+
+        if(L.type === "sort" || L.type === "speed"){
+          const list = document.createElement("div");
+          list.className = "cardlist";
+          list.id = "cardList";
+
+          const items = L.makeItems();
+
+          // card IDs + private key mapping (key is the correct period key, never stored in DOM)
+          const ids = items.map(()=> crypto.randomUUID());
+          const palette = shuffle([...COLOR_POOL]).slice(0, items.length);
+
+          items.forEach((it, i)=>{
+            const id = ids[i];
+            cardKeyById.set(id, it.key);
+            list.appendChild(makeCard({ id, label: it.label, color: palette[i], draggable:true }));
+          });
+
+          // shuffle visual order
+          shuffle($$(".card", list)).forEach(c => list.appendChild(c));
+
+          wireSortDnD(list);
+          work.appendChild(list);
+
+          work.appendChild(Object.assign(document.createElement("div"),{
+            className:"hint",
+            textContent:"Drag to reorder. Keyboard: focus a card, press ↑/↓."
+          }));
+
+          if(L.type === "speed"){
+            // pick direction randomly each time
+            currentDirection = (Math.random()<0.5) ? "old2young" : "young2old";
+            levelDesc.textContent =
+              `${L.desc} Direction: ${currentDirection==="old2young" ? "Oldest → Youngest" : "Youngest → Oldest"}.`;
+
+            currentExpected = (currentDirection==="old2young") ? PERIODS_OLD_TO_YOUNG : PERIODS_YOUNG_TO_OLD;
+            startSpeedTimer();
+          }else{
+            currentExpected = L.expected();
+          }
+        }
+
+        if(L.type === "dropdown"){
+          const container = document.createElement("div");
+          container.className = "cardlist";
+
+          const items = L.makeItems();
+          const ids = items.map(()=> crypto.randomUUID());
+          const palette = shuffle([...COLOR_POOL]).slice(0, items.length);
+
+          // shuffle cards themselves (visual)
+          const order = items.map((it,i)=>({it, id:ids[i], color:palette[i]}));
+          shuffle(order);
+
+          for(const row of order){
+            cardKeyById.set(row.id, row.it.key);
+
+            const wrap = document.createElement("div");
+            wrap.className = "qaRow";
+
+            const card = makeCard({ id: row.id, label: row.it.label, color: row.color, draggable:false });
+            const sel = document.createElement("select");
+            sel.className = "qaSelect";
+            sel.dataset.id = row.id;
+
+            const opt0 = document.createElement("option");
+            opt0.value = "";
+            opt0.textContent = "Select a period…";
+            sel.appendChild(opt0);
+
+            for(const p of PERIODS_OLD_TO_YOUNG){
+              const o = document.createElement("option");
+              o.value = p;
+              o.textContent = p;
+              sel.appendChild(o);
             }
 
-            init();
-        })();
-    </script>
+            wrap.append(card, sel);
+            container.appendChild(wrap);
+          }
+
+          work.appendChild(container);
+          work.appendChild(Object.assign(document.createElement("div"),{
+            className:"hint",
+            textContent:"Level 5: select the correct period for each life event, then Submit."
+          }));
+
+          currentExpected = L.expected();
+        }
+      }
+
+      /* =========================
+         Sorting (drag + keyboard)
+         ========================= */
+      function wireSortDnD(list){
+        let dragged = null;
+
+        list.addEventListener("dragstart",(e)=>{
+          const card = e.target.closest(".card");
+          if(!card) return;
+          dragged = card;
+          card.classList.add("dragging");
+          e.dataTransfer?.setData("text/plain","x");
+          if(e.dataTransfer) e.dataTransfer.effectAllowed="move";
+        });
+
+        list.addEventListener("dragend",()=>{
+          if(dragged) dragged.classList.remove("dragging");
+          dragged = null;
+        });
+
+        list.addEventListener("dragover",(e)=>{
+          e.preventDefault();
+          if(!dragged) return;
+          const after = getAfter(list, e.clientY);
+          if(after == null) list.appendChild(dragged);
+          else list.insertBefore(dragged, after);
+        });
+
+        // keyboard fallback
+        list.addEventListener("keydown",(e)=>{
+          const card = e.target.closest(".card");
+          if(!card) return;
+          if(e.key==="ArrowUp"){
+            e.preventDefault();
+            const prev = card.previousElementSibling;
+            if(prev) list.insertBefore(card, prev);
+          }else if(e.key==="ArrowDown"){
+            e.preventDefault();
+            const next = card.nextElementSibling;
+            if(next) list.insertBefore(next, card);
+          }
+        });
+
+        function getAfter(container, y){
+          const els = [...container.querySelectorAll(".card:not(.dragging)")];
+          let closest = { offset: Number.NEGATIVE_INFINITY, el: null };
+          for(const el of els){
+            const box = el.getBoundingClientRect();
+            const offset = y - (box.top + box.height/2);
+            if(offset < 0 && offset > closest.offset){
+              closest = { offset, el };
+            }
+          }
+          return closest.el;
+        }
+      }
+
+      /* =========================
+         Submit checking
+         - No reshuffle on wrong
+         - Attempts always count
+         ========================= */
+      function bumpAttempts(){
+        attempts[lvlIndex] += 1;
+        attemptsEl.textContent = String(attempts[lvlIndex]);
+      }
+
+      function checkSort(){
+        const list = $("#cardList");
+        const ids = $$(".card", list).map(c => c.dataset.id);
+        const keys = ids.map(id => cardKeyById.get(id));
+        const expected = currentExpected;
+
+        if(keys.length !== expected.length) return false;
+        for(let i=0;i<expected.length;i++){
+          if(keys[i] !== expected[i]) return false;
+        }
+        return true;
+      }
+
+      function checkDropdown(){
+        const selects = $$(".qaSelect", work);
+        // must be complete
+        for(const s of selects){
+          if(!s.value) return { ok:false, incomplete:true };
+        }
+        for(const s of selects){
+          const correctKey = cardKeyById.get(s.dataset.id);
+          if(s.value !== correctKey) return { ok:false, incomplete:false };
+        }
+        return { ok:true, incomplete:false };
+      }
+
+      function submit(){
+        bumpAttempts();
+
+        // Lock out “submit spam” visually, but keep behavior predictable.
+        btnSubmit.disabled = true;
+        setTimeout(()=> btnSubmit.disabled = false, 180);
+
+        let ok = false;
+
+        if(currentType === "sort" || currentType === "speed"){
+          ok = checkSort();
+        }else if(currentType === "dropdown"){
+          const r = checkDropdown();
+          if(r.incomplete){
+            setStatus("warn","Incomplete");
+            setFeedback("Not yet","Choose a period for every card, then Submit.");
+            work.classList.remove("shake"); void work.offsetWidth; work.classList.add("shake");
+            return;
+          }
+          ok = r.ok;
+        }
+
+        if(ok){
+          completed[lvlIndex] = true;
+          btnNext.disabled = false;
+
+          setStatus("good","Correct");
+          setFeedback("Correct","Next is unlocked. Click Next to continue.");
+          if(currentType === "speed"){
+            stopSpeedTimer(true);
+          }
+
+          // if all 6 levels done, unlock Level 7 canvas immediately when they click Next from L6
+          return;
+        }
+
+        // wrong
+        setStatus("bad","Incorrect");
+        setFeedback("Incorrect","Adjust your work and submit again.");
+        work.classList.remove("shake"); void work.offsetWidth; work.classList.add("shake");
+
+        if(currentType === "speed"){
+          speedTimeLeft = Math.max(0, speedTimeLeft - SPEED_PENALTY);
+          timeLeftEl.textContent = fmtTime(speedTimeLeft);
+        }
+      }
+
+      /* =========================
+         Shuffle / Reset
+         - Shuffle never clears work (except rearranging)
+         - Reset rebuilds level
+         ========================= */
+      function shuffleCurrent(){
+        if(currentType === "sort" || currentType === "speed"){
+          const list = $("#cardList");
+          const cards = $$(".card", list);
+          shuffle(cards).forEach(c => list.appendChild(c));
+          setStatus("warn","Shuffled");
+          setFeedback("Shuffled","Same level, new card order.");
+        }else if(currentType === "dropdown"){
+          // reorder the rows, but preserve chosen selections
+          const container = $(".cardlist", work);
+          const rows = Array.from(container.children);
+          shuffle(rows).forEach(r => container.appendChild(r));
+          setStatus("warn","Shuffled");
+          setFeedback("Shuffled","Same answers preserved; card order shuffled.");
+        }
+      }
+
+      function resetLevel(){
+        attempts[lvlIndex] = 0;
+        attemptsEl.textContent = "0";
+        completed[lvlIndex] = false;
+        btnNext.disabled = true;
+        renderLevel();
+      }
+
+      /* =========================
+         Navigation / Level 7 unlock
+         ========================= */
+      function goTo(i){
+        lvlIndex = Math.max(0, Math.min(LEVELS.length-1, i));
+        renderLevel();
+      }
+
+      function allSixComplete(){
+        return completed.every(Boolean);
+      }
+
+      function next(){
+        if(!completed[lvlIndex]) return;
+
+        // finishing level 6 and pressing Next -> slide up Level 7
+        if(lvlIndex === LEVELS.length-1){
+          showLevel7();
+          return;
+        }
+        goTo(lvlIndex + 1);
+      }
+
+      /* =========================
+         Level 6 timer
+         ========================= */
+      function startSpeedTimer(){
+        timerPill.style.display = "inline-flex";
+        speedTimeLeft = 60;
+        timeLeftEl.textContent = fmtTime(speedTimeLeft);
+
+        stopSpeedTimer();
+        speedTimer = setInterval(()=>{
+          speedTimeLeft -= 1;
+          timeLeftEl.textContent = fmtTime(speedTimeLeft);
+          if(speedTimeLeft <= 0){
+            stopSpeedTimer(false);
+            setStatus("bad","Time’s up");
+            setFeedback("Time’s up","Reset and try again.");
+            work.classList.remove("shake"); void work.offsetWidth; work.classList.add("shake");
+            btnNext.disabled = true;
+            completed[lvlIndex] = false;
+          }
+        },1000);
+      }
+      function stopSpeedTimer(won=false){
+        if(speedTimer){ clearInterval(speedTimer); speedTimer = null; }
+        if(currentType !== "speed"){
+          timerPill.style.display = "none";
+          timeLeftEl.textContent = "--";
+        }else{
+          if(won){
+            timerPill.style.display = "none";
+          }
+        }
+      }
+
+      /* =========================
+         Bonus Level 7 (canvas + quiz)
+         ========================= */
+      let lvl7Started = false;
+      let lvl7StartTime = 0;
+      let lvl7Tick = null;
+      let lvl7Correct = 0;
+      let lvl7Score = 0;
+      let currentQ = null;
+
+      function showLevel7(){
+        // require all 6 levels complete
+        if(!allSixComplete()) return;
+
+        lvl7.classList.add("show");
+        lvl7.setAttribute("aria-hidden","false");
+
+        // fireflies
+        if(!lvl7Field){
+          lvl7Field = new FireflyField($("#lvl7Canvas"), {
+            count: 130,
+            bg: "rgba(0,0,0,1)",
+            glow: "rgba(255,210,140,"
+          });
+          lvl7Field.start();
+        }
+
+        lvl7Started = false;
+        lvl7Correct = 0;
+        lvl7Score = 0;
+        lvl7MiniStatus.textContent = "Waiting…";
+        lvl7TimerEl.textContent = "0:00";
+        lvl7ScoreLine.textContent = "Score: 0 points";
+        lvl7ProgressLine.textContent = "Correct: 0 / 15";
+
+        lvl7StartArea.style.display = "";
+        lvl7GameArea.style.display = "none";
+      }
+
+      function startLevel7(){
+        lvl7Started = true;
+        lvl7StartTime = Date.now();
+        lvl7MiniStatus.textContent = "Go!";
+        lvl7StartArea.style.display = "none";
+        lvl7GameArea.style.display = "";
+
+        if(lvl7Tick) clearInterval(lvl7Tick);
+        lvl7Tick = setInterval(()=>{
+          const sec = (Date.now() - lvl7StartTime)/1000;
+          lvl7TimerEl.textContent = fmtTime(sec);
+        }, 250);
+
+        nextQuestion();
+      }
+
+      function pickTwoDistinct(){
+        const a = PERIODS_OLD_TO_YOUNG[Math.floor(Math.random()*PERIODS_OLD_TO_YOUNG.length)];
+        let b = a;
+        while(b === a) b = PERIODS_OLD_TO_YOUNG[Math.floor(Math.random()*PERIODS_OLD_TO_YOUNG.length)];
+        return [a,b];
+      }
+
+      function olderOf(a,b){
+        const ia = PERIODS_OLD_TO_YOUNG.indexOf(a);
+        const ib = PERIODS_OLD_TO_YOUNG.indexOf(b);
+        return (ia < ib) ? a : b;
+      }
+      function youngerOf(a,b){
+        const ia = PERIODS_OLD_TO_YOUNG.indexOf(a);
+        const ib = PERIODS_OLD_TO_YOUNG.indexOf(b);
+        return (ia > ib) ? a : b;
+      }
+
+      function nextQuestion(){
+        const [p1,p2] = pickTwoDistinct();
+        const askOlder = Math.random() < 0.5;
+        const correct = askOlder ? olderOf(p1,p2) : youngerOf(p1,p2);
+
+        currentQ = { p1, p2, askOlder, correct };
+
+        qTag.textContent = askOlder ? "OLDER?" : "YOUNGER?";
+
+        // Randomize which side shows which period (don’t imply answer position)
+        if(Math.random()<0.5){
+          choiceA.textContent = p1;
+          choiceB.textContent = p2;
+          choiceA.dataset.pick = p1;
+          choiceB.dataset.pick = p2;
+        }else{
+          choiceA.textContent = p2;
+          choiceB.textContent = p1;
+          choiceA.dataset.pick = p2;
+          choiceB.dataset.pick = p1;
+        }
+      }
+
+      function answer7(pick){
+        if(!currentQ) return;
+
+        const correct = (pick === currentQ.correct);
+        if(correct){
+          lvl7Score += 1;
+          lvl7Correct += 1;
+          lvl7MiniStatus.textContent = "Correct +1";
+        }else{
+          lvl7Score -= 1;
+          lvl7MiniStatus.textContent = "Incorrect −1";
+          // shake the card
+          const c = $("#lvl7Card");
+          c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
+        }
+
+        lvl7ScoreLine.textContent = `Score: ${lvl7Score} points`;
+        lvl7ProgressLine.textContent = `Correct: ${lvl7Correct} / 15`;
+
+        if(lvl7Correct >= 15){
+          finishLevel7();
+          return;
+        }
+        nextQuestion();
+      }
+
+      function finishLevel7(){
+        if(lvl7Tick){ clearInterval(lvl7Tick); lvl7Tick = null; }
+        lvl7MiniStatus.textContent = "Complete!";
+        // show certificate overlay
+        showCertificate();
+      }
+
+      /* =========================
+         Certificate PDF (jsPDF)
+         ========================= */
+      function showCertificate(){
+        // overlay fireflies behind it
+        certOverlay.classList.remove("hidden");
+        certOverlay.setAttribute("aria-hidden","false");
+        if(!certField){
+          certField = new FireflyField($("#certCanvas"), {
+            count: 110,
+            bg: "rgba(0,0,0,1)",
+            glow: "rgba(255,210,140,"
+          });
+          certField.start();
+        }
+        setTimeout(()=> studentName.focus(), 0);
+      }
+      function hideCertificate(){
+        certOverlay.classList.add("hidden");
+        certOverlay.setAttribute("aria-hidden","true");
+      }
+
+      function safeFilePart(s){
+        return (s||"Student")
+          .trim()
+          .replace(/[^\w\- ]+/g,"")
+          .replace(/\s+/g,"_")
+          .slice(0,40);
+      }
+
+      async function sha256Hex(str){
+        const enc = new TextEncoder();
+        const buf = await crypto.subtle.digest("SHA-256", enc.encode(str));
+        return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+      }
+
+      async function generatePDF(name){
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation:"landscape", unit:"pt", format:"letter" });
+        const W = doc.internal.pageSize.getWidth();
+        const H = doc.internal.pageSize.getHeight();
+
+        // soft soap background
+        doc.setFillColor(240, 253, 255);
+        doc.rect(0,0,W,H,"F");
+
+        // border
+        doc.setDrawColor(34,193,214);
+        doc.setLineWidth(4);
+        doc.roundedRect(36,36,W-72,H-72,18,18);
+
+        doc.setDrawColor(167,139,250);
+        doc.setLineWidth(1.5);
+        doc.roundedRect(54,54,W-108,H-108,14,14);
+
+        // title
+        doc.setTextColor(11,18,32);
+        doc.setFont("times","bold");
+        doc.setFontSize(34);
+        doc.text("Certificate of Achievement", W/2, 150, { align:"center" });
+
+        doc.setFont("times","normal");
+        doc.setFontSize(16);
+        doc.text("This certifies that", W/2, 205, { align:"center" });
+
+        doc.setFont("times","bold");
+        doc.setFontSize(40);
+        doc.text(name, W/2, 270, { align:"center" });
+
+        doc.setFont("times","normal");
+        doc.setFontSize(16);
+        doc.text("has achieved geologic greatness by mastering major geologic time periods", W/2, 320, { align:"center" });
+        doc.text("from the Cambrian through the Quaternary using the ESSRT Geologic History reference.", W/2, 345, { align:"center" });
+
+        const elapsedSec = lvl7Started ? (Date.now() - lvl7StartTime)/1000 : 0;
+        doc.setFontSize(14);
+        doc.text(`Bonus Level 7: 15 correct  |  Score: ${lvl7Score}  |  Time: ${fmtTime(elapsedSec)}`, W/2, 385, { align:"center" });
+
+        const dateStr = new Date().toLocaleDateString(undefined, { year:"numeric", month:"long", day:"numeric" });
+        doc.setFontSize(14);
+        doc.text(`Awarded: ${dateStr}`, 90, H-120);
+
+        // signature line
+        doc.setDrawColor(11,18,32);
+        doc.setLineWidth(1);
+        doc.line(90, H-95, 340, H-95);
+        doc.setFontSize(12);
+        doc.text("Teacher / School", 90, H-75);
+
+        // certificate id (short hash)
+        const certId = (await sha256Hex(`${name}|${Date.now()}|${Math.random()}`)).slice(0,10).toUpperCase();
+        doc.setFont("courier","normal");
+        doc.setFontSize(10);
+        doc.text(`Certificate ID: ${certId}`, W-90, H-60, { align:"right" });
+
+        doc.save(`Geologic_Greatness_${safeFilePart(name)}.pdf`);
+      }
+
+      /* =========================
+         Splash show/hide
+         ========================= */
+      function hideSplash(){
+        splash.classList.add("hidden");
+        splash.setAttribute("aria-hidden","true");
+        appRoot.setAttribute("aria-hidden","false");
+        levelSelect.disabled = false;
+      }
+
+      /* =========================
+         Wire events
+         ========================= */
+      btnBegin.addEventListener("click", ()=> hideSplash());
+      splash.addEventListener("click", (e)=>{
+        if(e.target === splash || e.target === $("#splashCanvas")) hideSplash();
+      });
+
+      btnReset.addEventListener("click", resetLevel);
+      btnShuffle.addEventListener("click", shuffleCurrent);
+      btnSubmit.addEventListener("click", submit);
+      btnNext.addEventListener("click", next);
+
+      levelSelect.addEventListener("change", ()=>{
+        // Do not allow skipping ahead past incomplete levels
+        const target = Number(levelSelect.value);
+        if(target <= lvlIndex) { goTo(target); return; }
+
+        // only allow moving forward if all prior are complete
+        for(let i=0;i<target;i++){
+          if(!completed[i]) { levelSelect.value = String(lvlIndex); return; }
+        }
+        goTo(target);
+      });
+
+      btnLvl7Begin.addEventListener("click", startLevel7);
+      choiceA.addEventListener("click", ()=> answer7(choiceA.dataset.pick));
+      choiceB.addEventListener("click", ()=> answer7(choiceB.dataset.pick));
+
+      btnCertClose.addEventListener("click", hideCertificate);
+      btnCert.addEventListener("click", async ()=>{
+        const name = (studentName.value||"").trim();
+        if(!name){
+          studentName.focus();
+          return;
+        }
+        await generatePDF(name);
+        hideCertificate();
+      });
+
+      /* =========================
+         Init
+         ========================= */
+      function init(){
+        populateSelect();
+        goTo(0);
+
+        // Splash fireflies (soap-ish deep bathwater)
+        splashField = new FireflyField($("#splashCanvas"), {
+          count: 120,
+          bg: "rgba(10, 20, 28, 1)",         // dark bathwater
+          glow: "rgba(255, 220, 160,",
+          speed: 0.28,
+          jitter: 0.09
+        });
+        splashField.start();
+
+        // Certificate fireflies start on demand
+      }
+      init();
+
+    })();
+  </script>
 </body>
-
 </html>
