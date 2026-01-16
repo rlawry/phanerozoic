@@ -347,8 +347,10 @@
             position: relative;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            width: min(720px, 100%);
+            justify-content: flex-start;
+            max-width: 520px;
+            margin-inline: auto;
+            width: 100%;
             /* NEW: narrows cards */
             gap: 10px;
             padding: 12px 12px 12px 34px;
@@ -399,12 +401,13 @@
         }
 
         .card .txt {
-            font-size: 14px;
-            line-height: 1.25;
-            font-weight: 650;
-            /* NEW: thicker text */
-            letter-spacing: 0.1px;
-            /* optional: improves legibility */
+            flex: 1;
+            /* use remaining space */
+            text-align: left;
+            /* bring text next to the handle */
+            font-weight: 800;
+            /* thicker text, no font-size change */
+            letter-spacing: 0.15px;
         }
 
         .handle {
